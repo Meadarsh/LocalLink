@@ -1,0 +1,13 @@
+# Server files (not needed in client package)
+server/
+docker/
+homebrew/
+ARCHITECTURE.md
+
+# Development files
+.gitignore
+.npmignore
+
+# Documentation (keep README)
+# README.md
+

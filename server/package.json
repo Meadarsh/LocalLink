@@ -1,0 +1,23 @@
+{
+  "name": "opentunnel-server",
+  "version": "1.0.0",
+  "description": "OpenTunnel server - Self-hosted HTTPS tunneling server",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "tunnel",
+    "ngrok",
+    "proxy",
+    "websocket"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.14.2"
+  }
+}
+
