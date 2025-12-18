@@ -1,5 +1,5 @@
 /**
- * OpenTunnel Server
+ * LocalLink Server
  * Express server with WebSocket tunnel endpoint
  */
 
@@ -31,7 +31,7 @@ app.get('/health', (req, res) => {
 
 // WebSocket server for tunnel connections
 const server = app.listen(PORT, () => {
-  console.log(`OpenTunnel server listening on port ${PORT}`);
+  console.log(`LocalLink server listening on port ${PORT}`);
   console.log(`WebSocket endpoint: ws://localhost:${PORT}/connect`);
 });
 

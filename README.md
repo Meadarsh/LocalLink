@@ -1,8 +1,8 @@
-# OpenTunnel
+# LocalLink
 
 A self-hosted HTTPS tunneling system similar to ngrok, but intentionally simpler and compatible with Render free-tier hosting.
 
-**OpenTunnel** allows you to expose local services to the internet through a central server, perfect for development, testing, and demos.
+**LocalLink** allows you to expose local services to the internet through a central server, perfect for development, testing, and demos.
 
 ## Features
 
@@ -18,7 +18,7 @@ A self-hosted HTTPS tunneling system similar to ngrok, but intentionally simpler
 
 ## Architecture
 
-OpenTunnel consists of two components:
+LocalLink consists of two components:
 
 1. **Server** - Central tunnel server that receives HTTPS traffic and forwards it to clients
 2. **Client** - CLI tool that connects to the server and forwards local traffic
@@ -53,7 +53,7 @@ Deploy to Render:
 #### Via npm (Recommended)
 
 ```bash
-npm install -g opentunnel
+npm install -g locallink
 ```
 
 #### Via Homebrew (macOS)
@@ -65,23 +65,23 @@ brew install --build-from-source ./homebrew/opentunnel.rb
 #### Via Docker
 
 ```bash
-docker build -t opentunnel -f docker/Dockerfile .
+docker build -t locallink -f docker/Dockerfile .
 ```
 
 ### 3. Configure and Use
 
 ```bash
 # Initialize with your server domain
-opentunnel init https://your-server.onrender.com
+locallink init https://your-server.onrender.com
 
 # Start tunneling (default port 3000)
-opentunnel
+locallink
 
 # Start tunneling on custom port
-opentunnel 8080
+locallink 8080
 
 # Check status
-opentunnel status
+locallink status
 ```
 
 ## Installation
@@ -90,8 +90,8 @@ opentunnel status
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/opentunnel.git
-cd opentunnel
+git clone https://github.com/Meadarsh/LocalLink.git
+cd LocalLink
 ```
 
 2. Install dependencies:
@@ -112,7 +112,7 @@ The server will listen on port 3001 (or `PORT` environment variable).
 #### Global npm Install
 
 ```bash
-npm install -g opentunnel
+npm install -g locallink
 ```
 
 #### From Source
@@ -120,18 +120,18 @@ npm install -g opentunnel
 ```bash
 cd client
 npm install
-npm link  # Makes opentunnel command available globally
+npm link  # Makes locallink command available globally
 ```
 
 #### Docker
 
 ```bash
 # Build image
-docker build -t opentunnel -f docker/Dockerfile .
+docker build -t locallink -f docker/Dockerfile .
 
 # Run
-docker run --rm opentunnel init https://your-domain.com
-docker run --rm opentunnel 3000
+docker run --rm locallink init https://your-domain.com
+docker run --rm locallink 3000
 ```
 
 #### Homebrew (macOS)
@@ -147,10 +147,10 @@ brew install --build-from-source ./homebrew/opentunnel.rb
 First, configure your server domain:
 
 ```bash
-opentunnel init https://your-server.onrender.com
+locallink init https://your-server.onrender.com
 ```
 
-This saves the domain to `~/.opentunnel/config.json`.
+This saves the domain to `~/.locallink/config.json`.
 
 ### Starting a Tunnel
 
@@ -158,19 +158,19 @@ Start tunneling your local service:
 
 ```bash
 # Default port 3000
-opentunnel
+locallink
 
 # Custom port
-opentunnel 8080
+locallink 8080
 
 # Explicit port flag
-opentunnel --port 5000
+locallink --port 5000
 ```
 
 ### Checking Status
 
 ```bash
-opentunnel status
+locallink status
 ```
 
 Output:
@@ -185,13 +185,13 @@ Uptime: 2h 15m 30s
 
 ```bash
 # Initialize
-docker run --rm opentunnel init https://your-domain.com
+docker run --rm locallink init https://your-domain.com
 
 # Start tunnel (with persistent config)
-docker run --rm -v ~/.opentunnel:/root/.opentunnel opentunnel 3000
+docker run --rm -v ~/.locallink:/root/.locallink locallink 3000
 
 # Or combine domain and port
-docker run --rm opentunnel https://your-domain.com 3000
+docker run --rm locallink https://your-domain.com 3000
 ```
 
 ## Deployment
@@ -208,11 +208,11 @@ docker run --rm opentunnel https://your-domain.com 3000
 
 4. **HTTPS:** Render provides HTTPS automatically - no certificate setup needed!
 
-5. **Get your domain:** Render provides a URL like `https://opentunnel-xyz.onrender.com`
+5. **Get your domain:** Render provides a URL like `https://locallink-xyz.onrender.com`
 
 ### Other Platforms
 
-OpenTunnel works on any Node.js hosting platform:
+LocalLink works on any Node.js hosting platform:
 
 - **Heroku:** Set `PORT` environment variable
 - **Railway:** Automatic port detection
@@ -228,7 +228,7 @@ Environment variables:
 
 ### Client Configuration
 
-Configuration is stored in `~/.opentunnel/config.json`:
+Configuration is stored in `~/.locallink/config.json`:
 
 ```json
 {
@@ -250,7 +250,7 @@ The client automatically reconnects on disconnect with exponential backoff:
 
 ### Streaming
 
-OpenTunnel streams request and response bodies in chunks:
+LocalLink streams request and response bodies in chunks:
 - No memory buffering for large payloads
 - Supports files, uploads, and streaming responses
 - Efficient for large data transfers
@@ -268,14 +268,14 @@ Real-time status tracking:
 - Connection state
 - Domain and port
 - Uptime calculation
-- Stored in `~/.opentunnel/status.json`
+- Stored in `~/.locallink/status.json`
 
 ## Development
 
 ### Project Structure
 
 ```
-opentunnel/
+locallink/
 ├── server/           # Tunnel server
 │   ├── server.js     # Express server + WebSocket
 │   ├── tunnel.js     # Tunnel management
@@ -313,7 +313,7 @@ node bin/opentunnel.js 3000
 ### Client can't connect to server
 
 - Verify server is running: `curl https://your-server.onrender.com/health`
-- Check domain in config: `cat ~/.opentunnel/config.json`
+- Check domain in config: `cat ~/.locallink/config.json`
 - Ensure WebSocket endpoint is accessible: `wss://your-server.onrender.com/connect`
 
 ### Tunnel disconnects frequently
@@ -324,7 +324,7 @@ node bin/opentunnel.js 3000
 
 ### Port already in use
 
-- Use a different port: `opentunnel 8080`
+- Use a different port: `locallink 8080`
 - Stop the service using the port
 - Check with: `lsof -i :3000`
 
@@ -360,8 +360,8 @@ Inspired by ngrok, but designed to be simpler and self-hosted.
 
 ## Support
 
-- **Issues:** [GitHub Issues](https://github.com/yourusername/opentunnel/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/yourusername/opentunnel/discussions)
+- **Issues:** [GitHub Issues](https://github.com/Meadarsh/LocalLink/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/Meadarsh/LocalLink/discussions)
 
 ## Changelog
 
