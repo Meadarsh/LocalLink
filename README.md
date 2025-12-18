@@ -41,7 +41,7 @@ npm install
 Set environment variable:
 - `PORT` (optional, defaults to 3001)
 
-Deploy to Render:
+Deploy to Render:✅
 1. Create a new Web Service
 2. Connect your repository
 3. Set build command: `cd server && npm install`
@@ -50,7 +50,7 @@ Deploy to Render:
 
 ### 2. Install the Client
 
-#### Via npm (After Publishing)
+#### Via npm (Recommended for Now)
 
 ```bash
 npm install -g @meadarsh/locallink
@@ -58,7 +58,7 @@ npm install -g @meadarsh/locallink
 
 **Note:** Package uses scoped name `@meadarsh/locallink`. After installation, use `locallink` command.
 
-#### From Source (Recommended for Now)
+#### From Source 
 
 ```bash
 cd client
