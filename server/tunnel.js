@@ -62,11 +62,19 @@ export class TunnelManager {
    * @param {Object} res - Express response object
    */
   forwardRequest(req, res) {
+    // Prevent multiple handlers on the same request
+    if (res.headersSent) {
+      return;
+    }
+
     if (!this.isActive()) {
-      return res.status(503).json({
-        error: 'No active tunnel',
-        message: 'No tunnel client is currently connected'
-      });
+      if (!res.headersSent) {
+        res.status(503).json({
+          error: 'No active tunnel',
+          message: 'No tunnel client is currently connected'
+        });
+      }
+      return;
     }
 
     const requestId = `req_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
@@ -116,26 +124,34 @@ export class TunnelManager {
             pendingReq.res.end();
             this.pendingRequests.delete(requestId);
             // Remove listener
-            this.activeTunnel.ws.removeListener('message', pendingReq.responseHandler);
+            if (this.activeTunnel && this.activeTunnel.ws) {
+              this.activeTunnel.ws.removeListener('message', pendingReq.responseHandler);
+            }
           }
         } else if (message.type === 'chunk') {
           // Stream chunk - write directly to response
-          if (!pendingReq.responseStarted) {
+          if (!pendingReq.responseStarted && !pendingReq.res.headersSent) {
             // Start response if not started
             pendingReq.res.status(200);
             pendingReq.responseStarted = true;
           }
-          const chunk = Buffer.from(message.data, 'base64');
-          pendingReq.res.write(chunk);
+          if (!pendingReq.res.headersSent || pendingReq.responseStarted) {
+            const chunk = Buffer.from(message.data, 'base64');
+            pendingReq.res.write(chunk);
+          }
         } else if (message.type === 'end') {
           // End of stream
-          if (!pendingReq.responseStarted) {
+          if (!pendingReq.responseStarted && !pendingReq.res.headersSent) {
             pendingReq.res.status(200);
           }
-          pendingReq.res.end();
+          if (!pendingReq.res.headersSent || pendingReq.responseStarted) {
+            pendingReq.res.end();
+          }
           this.pendingRequests.delete(requestId);
           // Remove listener
-          this.activeTunnel.ws.removeListener('message', pendingReq.responseHandler);
+          if (this.activeTunnel && this.activeTunnel.ws) {
+            this.activeTunnel.ws.removeListener('message', pendingReq.responseHandler);
+          }
         }
       } catch (error) {
         console.error('Error handling tunnel response:', error);
@@ -150,7 +166,7 @@ export class TunnelManager {
             pendingReq.res.end();
           }
           this.pendingRequests.delete(requestId);
-          if (pendingReq.responseHandler) {
+          if (pendingReq.responseHandler && this.activeTunnel && this.activeTunnel.ws) {
             this.activeTunnel.ws.removeListener('message', pendingReq.responseHandler);
           }
         }

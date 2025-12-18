@@ -59,8 +59,8 @@ wss.on('connection', (ws, req) => {
         }));
       } else if (message.type === 'response' || message.type === 'chunk' || message.type === 'end') {
         // These are handled by the tunnel manager's pending requests
-        // Broadcast to all listeners (handled in tunnel.js)
-        ws.emit('message', data);
+        // The tunnel manager has its own message listeners set up
+        // No need to emit - the listeners are already registered
       }
     } catch (error) {
       console.error('Error handling WebSocket message:', error);
@@ -80,18 +80,35 @@ wss.on('connection', (ws, req) => {
   });
 });
 
-// Forward all other requests to the tunnel
-app.use('*', (req, res) => {
-  tunnelManager.forwardRequest(req, res);
+// Forward all other requests to the tunnel (except health and static assets)
+app.use((req, res, next) => {
+  // Skip health endpoint
+  if (req.path === '/health') {
+    return next();
+  }
+  
+  try {
+    tunnelManager.forwardRequest(req, res);
+  } catch (error) {
+    console.error('Error in forwardRequest:', error);
+    if (!res.headersSent) {
+      res.status(500).json({
+        error: 'Internal server error',
+        message: error.message
+      });
+    }
+  }
 });
 
-// Error handling
+// Error handling middleware (must be last)
 app.use((err, req, res, next) => {
   console.error('Server error:', err);
-  res.status(500).json({
-    error: 'Internal server error',
-    message: err.message
-  });
+  if (!res.headersSent) {
+    res.status(500).json({
+      error: 'Internal server error',
+      message: err.message
+    });
+  }
 });
 
 // Graceful shutdown
