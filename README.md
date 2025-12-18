@@ -50,10 +50,20 @@ Deploy to Render:
 
 ### 2. Install the Client
 
-#### Via npm (Recommended)
+#### Via npm (After Publishing)
 
 ```bash
-npm install -g locallink
+npm install -g @meadarsh/locallink
+```
+
+**Note:** Package uses scoped name `@meadarsh/locallink`. After installation, use `locallink` command.
+
+#### From Source (Recommended for Now)
+
+```bash
+cd client
+npm install
+npm link  # Makes locallink command available globally
 ```
 
 #### Via Homebrew (macOS)
@@ -109,13 +119,21 @@ The server will listen on port 3001 (or `PORT` environment variable).
 
 ### Client Installation
 
-#### Global npm Install
+#### From Source (Recommended)
 
 ```bash
-npm install -g locallink
+cd client
+npm install
+npm link  # Makes locallink command available globally
 ```
 
-#### From Source
+#### Global npm Install (After Publishing)
+
+```bash
+npm install -g @meadarsh/locallink
+```
+
+**Note:** Package uses scoped name `@meadarsh/locallink`. After installation, use `locallink` command.
 
 ```bash
 cd client

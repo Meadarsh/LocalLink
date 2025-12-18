@@ -1,11 +1,11 @@
 {
-  "name": "opentunnel",
-  "version": "1.0.0",
-  "description": "OpenTunnel client - Self-hosted HTTPS tunneling client",
+  "name": "@meadarsh/locallink",
+  "version": "1.0.2",
+  "description": "LocalLink client - Self-hosted HTTPS tunneling client",
   "type": "module",
   "main": "lib/tunnel.js",
   "bin": {
-    "opentunnel": "./bin/opentunnel.js"
+    "locallink": "bin/opentunnel.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,10 +14,20 @@
     "tunnel",
     "ngrok",
     "proxy",
-    "websocket"
+    "websocket",
+    "locallink",
+    "self-hosted"
   ],
-  "author": "",
+  "author": "Meadarsh",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Meadarsh/LocalLink.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Meadarsh/LocalLink/issues"
+  },
+  "homepage": "https://github.com/Meadarsh/LocalLink#readme",
   "dependencies": {
     "ws": "^8.14.2",
     "chalk": "^4.1.2",
